@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 
 class TawfiqTicTacGame {
-    private char[][] grid;
+    private final char[][] grid;
     private char currentplayer;
     private boolean gameover;
     private char winner;
@@ -28,7 +28,7 @@ class TawfiqTicTacGame {
             }
         }
 
-                Line = new int[3][1];
+        Line = new int[3][1];
 
         gameover = false;
         currentplayer = 'X';
@@ -46,10 +46,10 @@ class TawfiqTicTacGame {
     public boolean Move(int row,int col) {
         if (grid[row][col] == ' ' && !gameover) {
             grid[row][col] = currentplayer;
-            if (checkWin(row, col)) {
+            if (checkwin(row, col)) {
                 gameover = true;
                 winner = currentplayer;
-            } else if (isBoardFull()) {
+            } else if (isboardfull()) {
                 gameover = true;
                 winner = 'D';
             } else {
@@ -61,7 +61,7 @@ class TawfiqTicTacGame {
         return false;
     }
 
-    private boolean checkWin(int row,int col) {
+    private boolean checkwin(int row,int col) {
         if (grid[0][col] == currentplayer && grid[1][col] == currentplayer && grid[2][col] == currentplayer) {
             for (int i = 0; i < 3; i++) Line[i] = new int[]{i, col};
             return true;
@@ -83,7 +83,7 @@ class TawfiqTicTacGame {
         return false;
     }
 
-    private boolean isBoardFull() {
+    private boolean isboardfull() {
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
                 if (grid[i][j] == ' ') return false;
@@ -93,14 +93,14 @@ class TawfiqTicTacGame {
 
 public class Main extends JFrame implements ActionListener {
 
-    private JPanel panel = new JPanel(new GridLayout(3, 3));
-    private JLabel label = new JLabel("Player X's turn", JLabel.CENTER);
-    private JButton[][] slide = new JButton[3][3];
-    private TawfiqTicTacGame game = new TawfiqTicTacGame();
+    private final JPanel panel = new JPanel(new GridLayout(3, 3));
+    private final JLabel label = new JLabel("Player X's turn", JLabel.CENTER);
+    private final JButton[][] slide = new JButton[3][3];
+    private final TawfiqTicTacGame game = new TawfiqTicTacGame();
 
     public Main() {
         setTitle("Tawfiq's Tic Tac Toe");
-        setSize(600, 700);
+        setSize(500, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -109,27 +109,27 @@ public class Main extends JFrame implements ActionListener {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 slide[i][j] = new JButton("");
-                slide[i][j].setFont(new Font("Arial", Font.BOLD, 80));
+                slide[i][j].setFont(new Font("Arial", Font.BOLD, 75));
                 slide[i][j].setBackground(Color.BLACK);
                 slide[i][j].addActionListener(this);
-               panel.add(slide[i][j]);
+                panel.add(slide[i][j]);
             }
         }
 
-        setLayout(new BorderLayout());
+
         setLayout(new BorderLayout());
         add(label, BorderLayout.NORTH);
         add(panel, BorderLayout.CENTER);
-        JButton resetButton = new JButton("Restart the Game");
-        resetButton.addActionListener(e -> resetGame());
-        add(resetButton, BorderLayout.SOUTH);
+        JButton resetbutton = new JButton("Restart the Game");
+        resetbutton.addActionListener(e -> resetgame());
+        add(resetbutton, BorderLayout.SOUTH);
         setVisible(true);
     }
 
-  //here override will happen
+    //here override will happen
     public void actionPerformed(ActionEvent e) {
         JButton pressed = (JButton) e.getSource();
-        outer:
+        boolean k=false;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (slide[i][j] == pressed) {
@@ -137,34 +137,36 @@ public class Main extends JFrame implements ActionListener {
                     if (game.Move(i, j)) {
                         slide[i][j].setText(String.valueOf(playermoved));
                         slide[i][j].setEnabled(false);
-                        break outer;
+                        k=true;
+                        break ;
                     }
                 }
             }
+            if(k)break;
         }
-     panel.repaint();
+        panel.repaint();
         if (game.isgameOver()) {
             char winner = game.getwinner();
-            if (winner != 'D') WinLine();
-            showGameOver();
+            if (winner != 'D') winline();
+            showgameover();
         } else {
             label.setText("Player " + game.getcurrentplayer() + "'s turn");
         }
     }
 
-     void WinLine() {
+    void winline() {
 
-            int[][] line = game.getwinline();
+        int[][] line = game.getwinline();
 
-            for (int[] index : line) {
-                slide[index[0]][index[1]].setBackground(Color.RED);
+        for (int[] index : line) {
+            slide[index[0]][index[1]].setBackground(Color.RED);
 
         }
 
     }
 
 
-    private void showGameOver() {
+    private void showgameover() {
         char winner = game.getwinner();
         if (winner == 'D') {
             JOptionPane.showMessageDialog(this, "The game is a draw!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
@@ -173,7 +175,7 @@ public class Main extends JFrame implements ActionListener {
         }
     }
 
-    private void resetGame() {
+    private void resetgame() {
         game.emptyboard();
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++) {
@@ -182,7 +184,6 @@ public class Main extends JFrame implements ActionListener {
                 slide[i][j].setBackground(null);
             }
     }
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::new);
     }
