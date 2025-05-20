@@ -5,12 +5,15 @@ import java.awt.event.ActionListener;
 
 
 class TawfiqTicTacGame {
+    //encapsulation occurs here
+  //final value
+    final int p=10;
     private final char[][] grid;
     private char currentplayer;
     private boolean gameover;
     private char winner;
     private int[][] Line;
-
+  static int h=0,f=0;
 
     public TawfiqTicTacGame() {
         grid = new char[3][3];
@@ -36,7 +39,7 @@ class TawfiqTicTacGame {
 
     }
 
-
+//setters and getters type implements here
     public char getwinner() { return winner; }
     public int[][] getwinline() { return Line; }
     public char getcurrentplayer() { return currentplayer; }
@@ -53,9 +56,22 @@ class TawfiqTicTacGame {
                 gameover = true;
                 winner = 'D';
             } else {
-                if(currentplayer=='X')currentplayer='0';
-                else currentplayer='X';
+                if (currentplayer == 'X') {
+                    currentplayer = '0';
+                    h++;
+                    //static implementation
+                    System.out.println("player x turns:"+h);
+                } else {
+                    currentplayer = 'X';
+                //static implementation
+                    f++;
+                    System.out.println("player y turns:"+f);
+                }
+              //as it is final cannot assign and increase final variable  p++;
+                System.out.println("final value:"+p);
             }
+
+
             return true;
         }
         return false;
@@ -89,6 +105,9 @@ class TawfiqTicTacGame {
                 if (grid[i][j] == ' ') return false;
         return true;
     }
+
+
+
 }
 
 public class Main extends JFrame implements ActionListener {
@@ -106,6 +125,7 @@ public class Main extends JFrame implements ActionListener {
 
 
 
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 slide[i][j] = new JButton("");
@@ -116,7 +136,7 @@ public class Main extends JFrame implements ActionListener {
             }
         }
 
-
+//here inherits occur with Jframe methods
         setLayout(new BorderLayout());
         add(label, BorderLayout.NORTH);
         add(panel, BorderLayout.CENTER);
@@ -126,7 +146,7 @@ public class Main extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    //here override will happen
+//actionperformed is an abstract class it implements by main class
     public void actionPerformed(ActionEvent e) {
         JButton pressed = (JButton) e.getSource();
         boolean k=false;
@@ -169,8 +189,10 @@ public class Main extends JFrame implements ActionListener {
     private void showgameover() {
         char winner = game.getwinner();
         if (winner == 'D') {
+
             JOptionPane.showMessageDialog(this, "The game is a draw!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
         } else {
+
             JOptionPane.showMessageDialog(this, "Player " + winner + " wins!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
         }
     }
@@ -186,5 +208,39 @@ public class Main extends JFrame implements ActionListener {
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::new);
+//interface:one kind of abstract class
+        interface   abc{
+
+            public void run();
+        }
+        class def implements abc
+        {
+            public  void run()
+            {
+                System.out.println("HE is running");
+            }
+
+        }
+        def oj=new def();
+        oj.run();
+
+        //inheritence
+        class   efg{
+
+            public void run()
+            {
+                System.out.println("HE is running");
+            }
+        }
+        class hij extends efg
+        {
+            public  void run()
+            {
+                System.out.println("HE is working hard");
+            }
+
+        }
+        hij oj1=new hij();
+        oj1.run();
     }
 }
